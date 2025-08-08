@@ -1,5 +1,5 @@
 import Title from "../components/Title";
-import BodyText from "../components/BodyText";
+import BodyText from "../components/SubText";
 import SearchBar from "../components/SearchBar";
 import { useState } from "react";
 
@@ -9,6 +9,7 @@ function Home() {
   return (
     <>
       <div className="bg-gradient-to-b from-gray-100 to-gray-300">
+        {/* bg-gradient-to-tl from-lime-200 via-sky-500 to-violet-500 */}
         <div
           className={`${
             !fadeout ? "animate-appear" : "animate-disappear"

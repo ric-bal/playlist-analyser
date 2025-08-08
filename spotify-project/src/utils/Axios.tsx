@@ -3,7 +3,7 @@ import axios from "axios";
 // managing token
 const tokenKey = "token_key";
 const tokenKeyExpiry = "token_expiry";
-const clientID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+const clientID = import.meta.env.VITE_SPOTIFY_CLIENT_ID; // TEMPORARY, IMPLEMENT BACKEND
 const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 
 const axiosInstance = axios.create({
