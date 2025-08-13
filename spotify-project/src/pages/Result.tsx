@@ -5,6 +5,8 @@ import BodyText from "../components/BodyText";
 import EmphasisSubText from "../components/EmphasisSubText";
 import { SlArrowDownCircle } from "react-icons/sl";
 import placeholder from "../imgs/placeholder2.jpg";
+import Refresh from "../components/Refresh";
+import SubTitle from "../components/SubTitle";
 
 type Props = {
   playlistData: {
@@ -15,6 +17,8 @@ type Props = {
     desc: string;
     coverURL: string;
     songCoverURLs: string[];
+    totalSongs: number;
+    playlistLengthMillis: number;
   };
 };
 
@@ -27,6 +31,8 @@ function Result({ playlistData }: Props) {
     desc,
     coverURL,
     songCoverURLs,
+    totalSongs,
+    playlistLengthMillis,
   } = playlistData;
 
   return (
@@ -35,12 +41,19 @@ function Result({ playlistData }: Props) {
         {(status === "error" && (
           <>
             <Error>{errorMessage}</Error>
-            <Return />
+            <div className="flex w-100">
+              <div className="flex w-50 justify-center">
+                <Return />
+              </div>
+              <div className="flex w-50 justify-center">
+                <Refresh />
+              </div>
+            </div>
           </>
         )) ||
           (status === "success" && (
             <>
-              <div className="w-9/10 h-8/10 m-auto py-10 pl-30 flex">
+              <div className="w-9/10 h-8/10 m-auto items-center py-10 pl-30 flex">
                 {/* image */}
                 <div className="w-2/5 h-full flex items-center justify-center pr-20">
                   <img
@@ -51,7 +64,7 @@ function Result({ playlistData }: Props) {
                 </div>
 
                 {/* text */}
-                <div className="w-1/2 h-full flex flex-col justify-center">
+                <div className="w-1/2 h-min flex flex-col justify-center p-20 bg-gray-300/30 rounded-2xl">
                   <PlaylistTitle>{title}</PlaylistTitle>
                   <Return />
 
@@ -80,8 +93,17 @@ function Result({ playlistData }: Props) {
       {status === "success" && (
         <div className="w-full h-screen flex flex-col items-center justify-center space-y-5 bg-gray-300">
           <div className="w-9/10 h-9/10 py-5 flex">
-            <div className="bg-gray-400 w-1/2 h-full mx-10 flex flex-col justify-center"></div>
-            <div className="w-250 h-250 mx-10 my-auto flex flex-wrap content-start">
+            <div className="w-1/2 h-full mx-10 flex flex-col p-10">
+              <div className="w-full h-min">
+                <SubTitle>Basic Info</SubTitle>
+              </div>
+              <div className="bg-gray-400/10 w-full h-full rounded-2xl p-5">
+                <p>{totalSongs}</p>
+                <p>{playlistLengthMillis}</p>
+              </div>
+            </div>
+
+            <div className="w-1/2 h-9/10 mx-10 my-auto flex flex-wrap content-start">
               {songCoverURLs.map((url, i) => (
                 <img
                   src={url === "placeholder" ? placeholder : url}
@@ -89,8 +111,8 @@ function Result({ playlistData }: Props) {
                   key={i}
                   className={
                     url === "placeholder"
-                      ? "h-15/100 w-15/100 m-2 drop-shadow-lg/25 hover:border-2 border-transparent opacity-7"
-                      : "h-15/100 w-15/100 m-2 drop-shadow-lg/25 hover:border-2 border-transparent"
+                      ? "h-15/100 w-15/100 m-2 drop-shadow-lg/25 opacity-7"
+                      : "h-15/100 w-15/100 m-2 drop-shadow-lg/25 relative hover:border-2 border-transparent"
                   }
                 ></img>
               ))}
