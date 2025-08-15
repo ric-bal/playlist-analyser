@@ -3,8 +3,46 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { getPlaylist } from "../api/getPlaylist";
 import Result from "./Result";
+import { getArtist } from "../api/getArtist";
+
+function msToTime(duration: number, options: { showHours: boolean }) {
+  let milliseconds = Math.floor((duration % 1000) / 100);
+  let seconds = Math.floor((duration / 1000) % 60);
+
+  let minutes: number;
+  if (options.showHours) {
+    minutes = Math.floor((duration / (1000 * 60)) % 60);
+  } else {
+    minutes = Math.floor(duration / (1000 * 60));
+  }
+
+  let minutesString = minutes < 10 ? "0" + minutes : minutes;
+  let secondsString = seconds < 10 ? "0" + seconds : seconds;
+
+  if (options.showHours) {
+    let hours = Math.floor(duration / (1000 * 60 * 60));
+    let hoursString = hours < 10 ? "0" + hours : hours;
+    return (
+      hoursString +
+      ":" +
+      minutesString +
+      ":" +
+      secondsString +
+      "." +
+      milliseconds
+    );
+  } else {
+    return minutesString + ":" + secondsString + "." + milliseconds;
+  }
+}
 
 function Playlist() {
+  console.log(msToTime(8507713, { showHours: true }));
+
+  const [artistEndpoint, setArtistEndpoint] = useState("");
+
+  // ===== EXTRACTING SURFACE LEVEL PLAYLIST DATA =====
+
   // requesting playlist data
   const { status, data, error, isError } = useQuery({
     queryKey: ["playlistDataQueryKey"],
@@ -27,6 +65,8 @@ function Playlist() {
     popularityArray: number[];
     mostPopularSong: (string | number)[];
     leastPopularSong: (string | number)[];
+    artistCounter: [string, number][];
+    genreCounter: [string, number][];
   }>({
     status: status,
     errorMessage: "",
@@ -42,6 +82,8 @@ function Playlist() {
     popularityArray: [],
     mostPopularSong: [],
     leastPopularSong: [],
+    artistCounter: [],
+    genreCounter: [],
   });
 
   // error message handling
@@ -71,8 +113,10 @@ function Playlist() {
     }));
   }, [isError, status, error]);
 
-  // songs
+  // extracting data
   useEffect(() => {
+    var IDArray = new Array();
+
     if (status === "success" && data) {
       const songCoverURLArray = new Array();
       let playlistLengthMillisTemp = 0;
@@ -81,13 +125,25 @@ function Playlist() {
       let popularityArrayTemp = Array(10).fill(0);
       let mostPopularSongTemp = ["", -Infinity];
       let leastPopularSongTemp = ["", Infinity];
+      let artistCounterTemp: { [name: string]: number } = {};
 
       const totalTracks = data?.data.tracks.total;
 
-      // EXTRACTING SURFACE LEVEL PLAYLIST DATA
       for (let i = 0; i < totalTracks; i++) {
         // individual song data
         const trackData = data?.data.tracks.items[i].track;
+
+        // playlist covers
+        if (i < 36 && i < totalTracks) {
+          songCoverURLArray.push(trackData.album.images[0].url);
+        }
+
+        if (i === totalTracks - 1 && songCoverURLArray.length < 36) {
+          const fixedArraySize = songCoverURLArray.length;
+          for (let i = 0; i < 36 - fixedArraySize; i++) {
+            songCoverURLArray.push("placeholder");
+          }
+        }
 
         // total playlist length
         playlistLengthMillisTemp += trackData.duration_ms;
@@ -116,18 +172,29 @@ function Playlist() {
           leastPopularSongTemp[1] = trackData.popularity;
         }
 
-        // playlist covers
-        if (i < 36 && i < totalTracks) {
-          songCoverURLArray.push(trackData.album.images[0].url);
-        }
+        // counting artists and constructing IDArray
+        trackData.artists.forEach((artist: any) => {
+          let artistName = artist.name;
+          if (artistName in artistCounterTemp) {
+            artistCounterTemp[artistName] += 1;
+          } else {
+            artistCounterTemp[artistName] = 1;
 
-        if (i === totalTracks - 1 && songCoverURLArray.length < 36) {
-          const fixedArraySize = songCoverURLArray.length;
-          for (let i = 0; i < 36 - fixedArraySize; i++) {
-            songCoverURLArray.push("placeholder");
+            if (IDArray.length < 50) {
+              IDArray.push(artist.id);
+            }
           }
-        }
+        });
       }
+
+      // most to least popular artists, object to array
+      let artistCounterTempArray = Object.entries(artistCounterTemp).sort(
+        ([, a], [, b]) => b - a
+      );
+
+      setArtistEndpoint(
+        "https://api.spotify.com/v1/artists?ids=" + IDArray.join(",")
+      );
 
       setPlaylistData({
         status,
@@ -144,9 +211,49 @@ function Playlist() {
         popularityArray: popularityArrayTemp,
         mostPopularSong: mostPopularSongTemp,
         leastPopularSong: leastPopularSongTemp,
+        artistCounter: artistCounterTempArray,
+        genreCounter: [],
       });
     }
   }, [status, data]);
+
+  // ===== EXTRACTING SURFACE LEVEL PLAYLIST DATA =====
+
+  // requesting artist data
+  const artistQuery = useQuery({
+    queryKey: ["artistDataQueryKey", artistEndpoint],
+    queryFn: () => getArtist(artistEndpoint),
+    enabled: !!artistEndpoint,
+    retry: false,
+  });
+
+  // extracting data
+  useEffect(() => {
+    let genreCounterTemp: { [name: string]: number } = {};
+
+    if (!artistQuery.isError) {
+      // counting genres
+      artistQuery.data?.data.artists.forEach((artist: any) => {
+        artist.genres.forEach((genre: string) => {
+          if (genre in genreCounterTemp) {
+            genreCounterTemp[genre] += 1;
+          } else {
+            genreCounterTemp[genre] = 1;
+          }
+        });
+      });
+
+      // most to least popular genres, object to array
+      let genreCounterTempArray = Object.entries(genreCounterTemp).sort(
+        ([, a], [, b]) => b - a
+      );
+
+      setPlaylistData((prev) => ({
+        ...prev,
+        genreCounter: genreCounterTempArray,
+      }));
+    }
+  }, [data, artistQuery.isError, artistQuery.data]);
 
   return <Result playlistData={playlistData} />;
 }

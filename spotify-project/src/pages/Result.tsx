@@ -19,6 +19,13 @@ type Props = {
     songCoverURLs: string[];
     totalSongs: number;
     playlistLengthMillis: number;
+    longestSong: (string | number)[];
+    shortestSong: (string | number)[];
+    popularityArray: number[];
+    mostPopularSong: (string | number)[];
+    leastPopularSong: (string | number)[];
+    artistCounter: [string, number][];
+    genreCounter: [string, number][];
   };
 };
 
@@ -33,6 +40,13 @@ function Result({ playlistData }: Props) {
     songCoverURLs,
     totalSongs,
     playlistLengthMillis,
+    longestSong,
+    shortestSong,
+    popularityArray,
+    mostPopularSong,
+    leastPopularSong,
+    artistCounter,
+    genreCounter,
   } = playlistData;
 
   return (
@@ -100,6 +114,13 @@ function Result({ playlistData }: Props) {
               <div className="bg-gray-400/10 w-full h-full rounded-2xl p-5">
                 <p>{totalSongs}</p>
                 <p>{playlistLengthMillis}</p>
+                <p>{longestSong}</p>
+                <p>{shortestSong}</p>
+                <p>{popularityArray}</p>
+                <p>{mostPopularSong}</p>
+                <p>{leastPopularSong}</p>
+                <p>{artistCounter}</p>
+                <p>{genreCounter}</p>
               </div>
             </div>
 
