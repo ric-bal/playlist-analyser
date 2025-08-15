@@ -5,8 +5,7 @@ import { getPlaylist } from "../api/getPlaylist";
 import Result from "./Result";
 import { getArtist } from "../api/getArtist";
 
-function msToTime(duration: number, options: { showHours: boolean }) {
-  let milliseconds = Math.floor((duration % 1000) / 100);
+function msToTime(duration: any, options: { showHours: boolean }) {
   let seconds = Math.floor((duration / 1000) % 60);
 
   let minutes: number;
@@ -16,23 +15,12 @@ function msToTime(duration: number, options: { showHours: boolean }) {
     minutes = Math.floor(duration / (1000 * 60));
   }
 
-  let minutesString = minutes < 10 ? "0" + minutes : minutes;
-  let secondsString = seconds < 10 ? "0" + seconds : seconds;
-
   if (options.showHours) {
     let hours = Math.floor(duration / (1000 * 60 * 60));
-    let hoursString = hours < 10 ? "0" + hours : hours;
-    return (
-      hoursString +
-      ":" +
-      minutesString +
-      ":" +
-      secondsString +
-      "." +
-      milliseconds
-    );
+
+    return hours + "h " + minutes + "m " + seconds + "s ";
   } else {
-    return minutesString + ":" + secondsString + "." + milliseconds;
+    return minutes + "m " + seconds + "s ";
   }
 }
 
@@ -58,11 +46,12 @@ function Playlist() {
     desc: string;
     coverURL: string;
     songCoverURLs: string[];
-    totalSongs: number;
-    playlistLengthMillis: number;
+    totalSongs: string;
+    playlistLength: string;
     longestSong: (string | number)[];
     shortestSong: (string | number)[];
     popularityArray: number[];
+    averagePopularity: string;
     mostPopularSong: (string | number)[];
     leastPopularSong: (string | number)[];
     artistCounter: [string, number][];
@@ -75,11 +64,12 @@ function Playlist() {
     desc: "",
     coverURL: "",
     songCoverURLs: [],
-    totalSongs: 0,
-    playlistLengthMillis: 0,
+    totalSongs: "",
+    playlistLength: "",
     longestSong: [],
     shortestSong: [],
     popularityArray: [],
+    averagePopularity: "",
     mostPopularSong: [],
     leastPopularSong: [],
     artistCounter: [],
@@ -119,10 +109,11 @@ function Playlist() {
 
     if (status === "success" && data) {
       const songCoverURLArray = new Array();
-      let playlistLengthMillisTemp = 0;
+      let playlistLengthMillis = 0;
       let longestSongTemp = ["", -Infinity];
       let shortestSongTemp = ["", Infinity];
       let popularityArrayTemp = Array(10).fill(0);
+      let popularityCounter = 0;
       let mostPopularSongTemp = ["", -Infinity];
       let leastPopularSongTemp = ["", Infinity];
       let artistCounterTemp: { [name: string]: number } = {};
@@ -146,7 +137,7 @@ function Playlist() {
         }
 
         // total playlist length
-        playlistLengthMillisTemp += trackData.duration_ms;
+        playlistLengthMillis += trackData.duration_ms;
 
         // longest and shortest songs
         if (trackData.duration_ms > longestSongTemp[1]) {
@@ -158,18 +149,19 @@ function Playlist() {
           shortestSongTemp[1] = trackData.duration_ms;
         }
 
-        // song popularity counters (0 - 10)
-        let index = Math.round(trackData.popularity / 10);
+        // song popularity counters (popularity is 0 - 100)
+        popularityCounter += trackData.popularity;
+        let index = Math.round(trackData.popularity);
         popularityArrayTemp[index] += 1;
 
         // most and least popular songs
         if (trackData.popularity > mostPopularSongTemp[1]) {
           mostPopularSongTemp[0] = trackData.name;
-          mostPopularSongTemp[1] = trackData.popularity;
+          mostPopularSongTemp[1] = trackData.popularity.toFixed(2);
         }
         if (trackData.popularity < leastPopularSongTemp[1]) {
           leastPopularSongTemp[0] = trackData.name;
-          leastPopularSongTemp[1] = trackData.popularity;
+          leastPopularSongTemp[1] = trackData.popularity.toFixed(2);
         }
 
         // counting artists and constructing IDArray
@@ -186,6 +178,18 @@ function Playlist() {
           }
         });
       }
+
+      // convert shortest and longest times to m:s format
+      longestSongTemp[1] = msToTime(longestSongTemp[1], {
+        showHours: false,
+      });
+
+      shortestSongTemp[1] = msToTime(shortestSongTemp[1], {
+        showHours: false,
+      });
+
+      // calculate average popularity
+      let averagePopularityTemp = (popularityCounter / totalTracks).toFixed(2);
 
       // most to least popular artists, object to array
       let artistCounterTempArray = Object.entries(artistCounterTemp).sort(
@@ -205,10 +209,13 @@ function Playlist() {
         coverURL: data.data.images[0].url,
         songCoverURLs: songCoverURLArray,
         totalSongs: totalTracks,
-        playlistLengthMillis: playlistLengthMillisTemp,
+        playlistLength: msToTime(playlistLengthMillis, {
+          showHours: true,
+        }),
         longestSong: longestSongTemp,
         shortestSong: shortestSongTemp,
         popularityArray: popularityArrayTemp,
+        averagePopularity: averagePopularityTemp,
         mostPopularSong: mostPopularSongTemp,
         leastPopularSong: leastPopularSongTemp,
         artistCounter: artistCounterTempArray,
@@ -217,7 +224,7 @@ function Playlist() {
     }
   }, [status, data]);
 
-  // ===== EXTRACTING SURFACE LEVEL PLAYLIST DATA =====
+  // ===== EXTRACTING GENRES FROM ARTISTS =====
 
   // requesting artist data
   const artistQuery = useQuery({

@@ -7,6 +7,7 @@ import { SlArrowDownCircle } from "react-icons/sl";
 import placeholder from "../imgs/placeholder2.jpg";
 import Refresh from "../components/Refresh";
 import SubTitle from "../components/SubTitle";
+import { Link } from "react-router-dom";
 
 type Props = {
   playlistData: {
@@ -17,11 +18,12 @@ type Props = {
     desc: string;
     coverURL: string;
     songCoverURLs: string[];
-    totalSongs: number;
-    playlistLengthMillis: number;
+    totalSongs: string;
+    playlistLength: string;
     longestSong: (string | number)[];
     shortestSong: (string | number)[];
     popularityArray: number[];
+    averagePopularity: string;
     mostPopularSong: (string | number)[];
     leastPopularSong: (string | number)[];
     artistCounter: [string, number][];
@@ -39,10 +41,11 @@ function Result({ playlistData }: Props) {
     coverURL,
     songCoverURLs,
     totalSongs,
-    playlistLengthMillis,
+    playlistLength,
     longestSong,
     shortestSong,
     popularityArray,
+    averagePopularity,
     mostPopularSong,
     leastPopularSong,
     artistCounter,
@@ -112,10 +115,46 @@ function Result({ playlistData }: Props) {
                 <SubTitle>Basic Info</SubTitle>
               </div>
               <div className="bg-gray-400/10 w-full h-full rounded-2xl p-5">
-                <p>{totalSongs}</p>
-                <p>{playlistLengthMillis}</p>
-                <p>{longestSong}</p>
-                <p>{shortestSong}</p>
+                <BodyText>
+                  There are <span className="font-bold">{totalSongs}</span>{" "}
+                  songs in this playlist, lasting{" "}
+                  <span className="font-bold">{playlistLength}</span>
+                </BodyText>
+
+                <div className="my-10"></div>
+
+                <BodyText>
+                  The longest song is{" "}
+                  <span className="font-bold">{longestSong[0]}</span>, at{" "}
+                  <span className="font-bold">{longestSong[1]}</span>
+                </BodyText>
+
+                <BodyText>
+                  The shortest song is{" "}
+                  <span className="font-bold">{shortestSong[0]}</span>, at{" "}
+                  <span className="font-bold">{shortestSong[1]}</span>
+                </BodyText>
+
+                <div className="my-10"></div>
+
+                <BodyText>
+                  The average popularity of all songs in the playlist is{" "}
+                  <span className="font-bold">{averagePopularity}</span> out of{" "}
+                  <span className="font-bold">100</span>
+                  <br></br>
+                  <span className="text-xl">
+                    For more information on popularity, visit the{" "}
+                    <span className="underline">
+                      <Link to="https://developer.spotify.com/documentation/web-api/reference/get-track">
+                        Spotify Web Api Reference
+                      </Link>
+                    </span>{" "}
+                    page
+                  </span>
+                </BodyText>
+
+                <div className="my-10"></div>
+
                 <p>{popularityArray}</p>
                 <p>{mostPopularSong}</p>
                 <p>{leastPopularSong}</p>
