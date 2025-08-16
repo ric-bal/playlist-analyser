@@ -25,8 +25,6 @@ function msToTime(duration: any, options: { showHours: boolean }) {
 }
 
 function Playlist() {
-  console.log(msToTime(8507713, { showHours: true }));
-
   const [artistEndpoint, setArtistEndpoint] = useState("");
 
   // ===== EXTRACTING SURFACE LEVEL PLAYLIST DATA =====
@@ -151,7 +149,8 @@ function Playlist() {
 
         // song popularity counters (popularity is 0 - 100)
         popularityCounter += trackData.popularity;
-        let index = Math.round(trackData.popularity);
+
+        let index = Math.round(trackData.popularity / 10);
         popularityArrayTemp[index] += 1;
 
         // most and least popular songs

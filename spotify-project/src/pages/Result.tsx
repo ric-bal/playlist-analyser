@@ -8,6 +8,8 @@ import placeholder from "../imgs/placeholder2.jpg";
 import Refresh from "../components/Refresh";
 import SubTitle from "../components/SubTitle";
 import { Link } from "react-router-dom";
+import Break from "../components/Break";
+import { FaAngleDown } from "react-icons/fa";
 
 type Props = {
   playlistData: {
@@ -85,21 +87,25 @@ function Result({ playlistData }: Props) {
                   <PlaylistTitle>{title}</PlaylistTitle>
                   <Return />
 
-                  <hr className="my-15 rounded-lg h-0.5 border-1 border-gray-500"></hr>
+                  <hr className="my-12 rounded-lg h-0.5 border-1 border-gray-500"></hr>
 
-                  <BodyText>{"Made by " + creator}</BodyText>
-                  <BodyText>{desc}</BodyText>
+                  <BodyText>
+                    Made by <span className="font-bold">{creator}</span>
+                  </BodyText>
+                  <BodyText>
+                    {desc === "" && "This playlist has no description"}
+                  </BodyText>
 
-                  <div className="my-1"></div>
-
-                  <div className="flex">
-                    <SlArrowDownCircle className="relative top-1.5 pr-2.5 h-7 w-7" />
+                  <div className="flex pt-10">
+                    {/* <SlArrowDownCircle className="relative top-1.5 pr-2.5 h-7 w-7" /> */}
+                    <FaAngleDown className="relative top-2 pr-2.5 size-6 fill-gray-600" />
 
                     <EmphasisSubText>
                       Scroll for more information
                     </EmphasisSubText>
 
-                    <SlArrowDownCircle className="relative top-1.5 pl-2.5 h-7 w-7" />
+                    <FaAngleDown className="relative top-2 pl-2.5 size-6 fill-gray-600" />
+                    {/* <SlArrowDownCircle className="relative top-1.5 pl-2.5 h-7 w-7" /> */}
                   </div>
                 </div>
               </div>
@@ -108,77 +114,165 @@ function Result({ playlistData }: Props) {
       </div>
 
       {status === "success" && (
-        <div className="w-full h-screen flex flex-col items-center justify-center space-y-5 bg-gray-300">
-          <div className="w-9/10 h-9/10 py-5 flex">
-            <div className="w-1/2 h-full mx-10 flex flex-col p-10">
-              <div className="w-full h-min">
-                <SubTitle>Basic Info</SubTitle>
+        <>
+          {/* BASIC INFO */}
+
+          <div className="w-full h-screen flex flex-col items-center justify-center space-y-5 bg-gray-300">
+            <div className="w-9/10 h-9/10 py-5 flex">
+              <div className="w-1/2 h-full mx-10 flex flex-col p-10">
+                <div className="w-min h-min whitespace-nowrap">
+                  <SubTitle>Basic Info</SubTitle>
+                </div>
+                <div className="bg-gray-400/10 w-full h-full rounded-2xl p-5 overflow-y-scroll">
+                  <BodyText>
+                    There are <span className="font-bold">{totalSongs}</span>{" "}
+                    songs in this playlist, lasting{" "}
+                    <span className="font-bold">{playlistLength}</span>
+                  </BodyText>
+
+                  <Break />
+
+                  <div className="border-l-2 pl-5">
+                    <BodyText>
+                      The longest song is{" "}
+                      <span className="font-bold">{longestSong[0]}</span>, at{" "}
+                      <span className="font-bold">{longestSong[1]}</span>
+                    </BodyText>
+
+                    <BodyText>
+                      The shortest song is{" "}
+                      <span className="font-bold">{shortestSong[0]}</span>, at{" "}
+                      <span className="font-bold">{shortestSong[1]}</span>
+                    </BodyText>
+                  </div>
+
+                  <Break />
+
+                  <BodyText>
+                    The average popularity of all songs in the playlist is{" "}
+                    <span className="font-bold">{averagePopularity}</span> out
+                    of <span className="font-bold">100</span>
+                    <br></br>
+                    <span className="text-xl">
+                      For more information on popularity, visit the{" "}
+                      <span className="underline">
+                        <Link to="https://developer.spotify.com/documentation/web-api/reference/get-track">
+                          Spotify Web Api Reference
+                        </Link>
+                      </span>{" "}
+                      page
+                    </span>
+                  </BodyText>
+
+                  <Break />
+
+                  <div className="border-l-2 pl-5">
+                    <BodyText>
+                      The most popular song is{" "}
+                      <span className="font-bold">{mostPopularSong[0]}</span>,
+                      at <span className="font-bold">{mostPopularSong[1]}</span>
+                    </BodyText>
+
+                    <BodyText>
+                      The least popular song is{" "}
+                      <span className="font-bold">{leastPopularSong[0]}</span>,
+                      at{" "}
+                      <span className="font-bold">{leastPopularSong[1]}</span>
+                    </BodyText>
+                  </div>
+
+                  <Break />
+
+                  {artistCounter[0] && (
+                    <div className="border-l-2 pl-5">
+                      <BodyText>
+                        The artist that features the most is{" "}
+                        <span className="font-bold">{artistCounter[0][0]}</span>
+                        , appearing on{" "}
+                        <span className="font-bold">{artistCounter[0][1]}</span>{" "}
+                        songs
+                      </BodyText>
+
+                      <BodyText>
+                        The artist that features the least is{" "}
+                        <span className="font-bold">
+                          {artistCounter[artistCounter.length - 1][0]}
+                        </span>
+                        , appearing on{" "}
+                        <span className="font-bold">
+                          {artistCounter[artistCounter.length - 1][1]}
+                        </span>{" "}
+                        songs
+                      </BodyText>
+                    </div>
+                  )}
+
+                  <Break />
+
+                  <BodyText>
+                    This playlist contains{" "}
+                    <span className="font-bold">{genreCounter.length}</span>{" "}
+                    unique genres
+                  </BodyText>
+
+                  <Break />
+
+                  {genreCounter[0] && (
+                    <div className="border-l-2 pl-5">
+                      <BodyText>
+                        The most prominent genre is{" "}
+                        <span className="font-bold">{genreCounter[0][0]}</span>,
+                        listed on{" "}
+                        <span className="font-bold">{genreCounter[0][1]}</span>{" "}
+                        songs
+                      </BodyText>
+
+                      <BodyText>
+                        The least prominent genre is{" "}
+                        <span className="font-bold">
+                          {genreCounter[genreCounter.length - 1][0]}
+                        </span>
+                        , listed on{" "}
+                        <span className="font-bold">
+                          {genreCounter[genreCounter.length - 1][1]}
+                        </span>{" "}
+                        songs
+                      </BodyText>
+                    </div>
+                  )}
+
+                  <div className="flex justify-center pt-10">
+                    <FaAngleDown className="size-7 fill-gray-600" />
+                  </div>
+                </div>
               </div>
-              <div className="bg-gray-400/10 w-full h-full rounded-2xl p-5">
-                <BodyText>
-                  There are <span className="font-bold">{totalSongs}</span>{" "}
-                  songs in this playlist, lasting{" "}
-                  <span className="font-bold">{playlistLength}</span>
-                </BodyText>
 
-                <div className="my-10"></div>
-
-                <BodyText>
-                  The longest song is{" "}
-                  <span className="font-bold">{longestSong[0]}</span>, at{" "}
-                  <span className="font-bold">{longestSong[1]}</span>
-                </BodyText>
-
-                <BodyText>
-                  The shortest song is{" "}
-                  <span className="font-bold">{shortestSong[0]}</span>, at{" "}
-                  <span className="font-bold">{shortestSong[1]}</span>
-                </BodyText>
-
-                <div className="my-10"></div>
-
-                <BodyText>
-                  The average popularity of all songs in the playlist is{" "}
-                  <span className="font-bold">{averagePopularity}</span> out of{" "}
-                  <span className="font-bold">100</span>
-                  <br></br>
-                  <span className="text-xl">
-                    For more information on popularity, visit the{" "}
-                    <span className="underline">
-                      <Link to="https://developer.spotify.com/documentation/web-api/reference/get-track">
-                        Spotify Web Api Reference
-                      </Link>
-                    </span>{" "}
-                    page
-                  </span>
-                </BodyText>
-
-                <div className="my-10"></div>
-
-                <p>{popularityArray}</p>
-                <p>{mostPopularSong}</p>
-                <p>{leastPopularSong}</p>
-                <p>{artistCounter}</p>
-                <p>{genreCounter}</p>
+              <div className="w-1/2 h-9/10 mx-10 my-auto flex flex-wrap content-start overflow-hidden">
+                {songCoverURLs.map((url, i) => (
+                  <img
+                    src={url === "placeholder" ? placeholder : url}
+                    alt="Playlist cover"
+                    key={i}
+                    className={
+                      url === "placeholder"
+                        ? "h-15/100 w-15/100 m-2 drop-shadow-lg/25 opacity-7"
+                        : "h-15/100 w-15/100 m-2 drop-shadow-lg/25 relative hover:border-2 border-transparent"
+                    }
+                  ></img>
+                ))}
               </div>
-            </div>
-
-            <div className="w-1/2 h-9/10 mx-10 my-auto flex flex-wrap content-start">
-              {songCoverURLs.map((url, i) => (
-                <img
-                  src={url === "placeholder" ? placeholder : url}
-                  alt="Playlist cover"
-                  key={i}
-                  className={
-                    url === "placeholder"
-                      ? "h-15/100 w-15/100 m-2 drop-shadow-lg/25 opacity-7"
-                      : "h-15/100 w-15/100 m-2 drop-shadow-lg/25 relative hover:border-2 border-transparent"
-                  }
-                ></img>
-              ))}
             </div>
           </div>
-        </div>
+
+          {/* GRAPHS */}
+
+          <div className="w-full h-screen flex flex-col items-center bg-gradient-to-b from-gray-300 to-gray-100">
+            <div className="h-min w-min mt-15 py-2 px-12  whitespace-nowrap border-b-2 border-gray-500">
+              <SubTitle>Graphs</SubTitle>
+            </div>
+            <div className="bg-blue-100 h-full w-9/10 m-10 p-2"></div>
+          </div>
+        </>
       )}
     </>
   );
