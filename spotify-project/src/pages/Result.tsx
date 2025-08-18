@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import Break from "../components/Break";
 import { FaAngleDown } from "react-icons/fa";
 import Carousel from "../components/Carousel";
+import BarChartTest from "../components/BarChartTest";
 
 type Props = {
   playlistData: {
@@ -24,7 +25,7 @@ type Props = {
     playlistLength: string;
     longestSong: (string | number)[];
     shortestSong: (string | number)[];
-    popularityArray: number[];
+    popularityArray: { pop: string; count: number }[];
     averagePopularity: string;
     mostPopularSong: (string | number)[];
     leastPopularSong: (string | number)[];
@@ -132,7 +133,7 @@ function Result({ playlistData }: Props) {
 
                   <Break />
 
-                  <div className="border-l-2 ml-8 pl-5">
+                  <div className="border-l-2 border-gray-500 ml-8 pl-5">
                     <BodyText>
                       The longest song is{" "}
                       <span className="font-bold">{longestSong[0]}</span>, at{" "}
@@ -166,7 +167,7 @@ function Result({ playlistData }: Props) {
 
                   <Break />
 
-                  <div className="border-l-2 ml-8 pl-5">
+                  <div className="border-l-2 border-gray-500 ml-8 pl-5">
                     <BodyText>
                       The most popular song is{" "}
                       <span className="font-bold">{mostPopularSong[0]}</span>,
@@ -184,7 +185,7 @@ function Result({ playlistData }: Props) {
                   <Break />
 
                   {artistCounter[0] && (
-                    <div className="border-l-2 ml-8 pl-5">
+                    <div className="border-l-2 border-gray-500 ml-8 pl-5">
                       <BodyText>
                         The artist that features the most is{" "}
                         <span className="font-bold">{artistCounter[0][0]}</span>
@@ -218,7 +219,7 @@ function Result({ playlistData }: Props) {
                   <Break />
 
                   {genreCounter[0] && (
-                    <div className="border-l-2 ml-8 pl-5">
+                    <div className="border-l-2 border-gray-500 ml-8 pl-5">
                       <BodyText>
                         The most prominent genre is{" "}
                         <span className="font-bold">{genreCounter[0][0]}</span>,
@@ -267,13 +268,15 @@ function Result({ playlistData }: Props) {
           {/* CHARTS */}
 
           <div className="w-full h-screen flex flex-col items-center bg-gradient-to-b from-gray-300 to-gray-100">
-            <div className="h-min w-min mt-15 py-2 px-12  whitespace-nowrap border-b-2 border-gray-500">
+            <div className="h-min w-min mt-10 px-12  whitespace-nowrap border-b-2 border-gray-400">
               <SubTitle>Charts</SubTitle>
             </div>
             <div className="bg-gray-400/10 rounded-2xl h-full w-9/10 m-10 p-2">
               <Carousel>
-                <div className="min-w-full">
-                  <p>hello 1</p>
+                <div className="min-w-full flex justify-center items-center">
+                  <div className="size-9/10 bg-pink-300/10 flex justify-center items-center">
+                    <BarChartTest chartData={popularityArray}></BarChartTest>
+                  </div>
                 </div>
                 <div className="min-w-full">
                   <p>hello 2</p>

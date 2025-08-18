@@ -24,6 +24,30 @@ function msToTime(duration: any, options: { showHours: boolean }) {
   }
 }
 
+function errorMessageHandler(isError: boolean, error: Error | null) {
+  let errorMessage = "";
+
+  if (isError) {
+    if (axios.isAxiosError(error)) {
+      const statusNumber = error.response?.status;
+      console.log(statusNumber);
+      if (statusNumber === 400) {
+        errorMessage = "Playlist data not found";
+      } else if (statusNumber === 401) {
+        errorMessage = "Bad token";
+      } else if (statusNumber === 429) {
+        errorMessage = "Exceeded rate limit";
+      } else {
+        errorMessage = "Unexpected error";
+      }
+    } else {
+      errorMessage = "Access token missing";
+    }
+  }
+
+  return errorMessage;
+}
+
 function Playlist() {
   const [artistEndpoint, setArtistEndpoint] = useState("");
 
@@ -48,7 +72,7 @@ function Playlist() {
     playlistLength: string;
     longestSong: (string | number)[];
     shortestSong: (string | number)[];
-    popularityArray: number[];
+    popularityArray: { pop: string; count: number }[];
     averagePopularity: string;
     mostPopularSong: (string | number)[];
     leastPopularSong: (string | number)[];
@@ -76,24 +100,7 @@ function Playlist() {
 
   // error message handling
   useEffect(() => {
-    let errorMessage = "";
-    if (isError) {
-      if (axios.isAxiosError(error)) {
-        const statusNumber = error.response?.status;
-        if (statusNumber === 400) {
-          errorMessage = "Playlist not found";
-        } else if (statusNumber === 401) {
-          errorMessage = "Bad token";
-        } else if (statusNumber === 429) {
-          errorMessage = "Exceeded rate limit";
-        } else {
-          errorMessage = "Unexpected error";
-        }
-      } else {
-        errorMessage = "Access token missing";
-      }
-    }
-
+    let errorMessage = errorMessageHandler(isError, error);
     setPlaylistData((prev) => ({
       ...prev,
       status,
@@ -110,7 +117,12 @@ function Playlist() {
       let playlistLengthMillis = 0;
       let longestSongTemp = ["", -Infinity];
       let shortestSongTemp = ["", Infinity];
-      let popularityArrayTemp = Array(10).fill(0);
+
+      let popularityArrayTemp: { pop: string; count: number }[] = [];
+      for (let i = 0; i <= 100; i = i + 10) {
+        popularityArrayTemp.push({ pop: i.toString(), count: 0 });
+      }
+
       let popularityCounter = 0;
       let mostPopularSongTemp = ["", -Infinity];
       let leastPopularSongTemp = ["", Infinity];
@@ -151,7 +163,7 @@ function Playlist() {
         popularityCounter += trackData.popularity;
 
         let index = Math.round(trackData.popularity / 10);
-        popularityArrayTemp[index] += 1;
+        popularityArrayTemp[index].count += 1;
 
         // most and least popular songs
         if (trackData.popularity > mostPopularSongTemp[1]) {
@@ -233,11 +245,24 @@ function Playlist() {
     retry: false,
   });
 
+  // error message handling
+  useEffect(() => {
+    let errorMessage = errorMessageHandler(
+      artistQuery.isError,
+      artistQuery.error
+    );
+    setPlaylistData((prev) => ({
+      ...prev,
+      status,
+      errorMessage,
+    }));
+  }, [artistQuery.isError, artistQuery.status, artistQuery.error]);
+
   // extracting data
   useEffect(() => {
     let genreCounterTemp: { [name: string]: number } = {};
 
-    if (!artistQuery.isError) {
+    if (!artistQuery.isError && artistQuery.data) {
       // counting genres
       artistQuery.data?.data.artists.forEach((artist: any) => {
         artist.genres.forEach((genre: string) => {
@@ -259,7 +284,7 @@ function Playlist() {
         genreCounter: genreCounterTempArray,
       }));
     }
-  }, [data, artistQuery.isError, artistQuery.data]);
+  }, [artistQuery.status, artistQuery.data]);
 
   return <Result playlistData={playlistData} />;
 }
