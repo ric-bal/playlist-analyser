@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
+// import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 
 interface Props {
   children: ReactNode;
@@ -30,7 +30,8 @@ function Carousel({ children }: Props) {
       </div>
 
       {/* buttons */}
-      <div className="absolute inset-0 flex items-center justify-between p-5">
+
+      <div className="absolute inset-y-0 left-0 w-min flex items-center p-5">
         <button
           onClick={prev}
           disabled={currentSlide === 0}
@@ -44,6 +45,9 @@ function Carousel({ children }: Props) {
             }
           />
         </button>
+      </div>
+
+      <div className="absolute inset-y-0 right-0 w-min flex items-center p-5">
         <button
           onClick={next}
           disabled={currentSlide === 2}

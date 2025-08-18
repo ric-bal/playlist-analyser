@@ -10,7 +10,8 @@ import { Link } from "react-router-dom";
 import Break from "../components/Break";
 import { FaAngleDown } from "react-icons/fa";
 import Carousel from "../components/Carousel";
-import BarChartTest from "../components/BarChartTest";
+import BarChartTest from "../components/PopularityChart";
+import ChartTitle from "@/components/ChartTitle";
 
 type Props = {
   playlistData: {
@@ -29,7 +30,7 @@ type Props = {
     averagePopularity: string;
     mostPopularSong: (string | number)[];
     leastPopularSong: (string | number)[];
-    artistCounter: [string, number][];
+    artistArray: { name: string; count: number }[];
     genreCounter: [string, number][];
   };
 };
@@ -51,7 +52,7 @@ function Result({ playlistData }: Props) {
     averagePopularity,
     mostPopularSong,
     leastPopularSong,
-    artistCounter,
+    artistArray,
     genreCounter,
   } = playlistData;
 
@@ -77,7 +78,7 @@ function Result({ playlistData }: Props) {
                 {/* image */}
                 <div className="w-2/5 h-full flex items-center justify-center pr-20">
                   <img
-                    src={coverURL}
+                    src={coverURL || undefined}
                     alt="Playlist cover"
                     className="h-66/100 w-85/100 drop-shadow-lg/25"
                   ></img>
@@ -184,24 +185,26 @@ function Result({ playlistData }: Props) {
 
                   <Break />
 
-                  {artistCounter[0] && (
+                  {artistArray[0] && (
                     <div className="border-l-2 border-gray-500 ml-8 pl-5">
                       <BodyText>
                         The artist that features the most is{" "}
-                        <span className="font-bold">{artistCounter[0][0]}</span>
+                        <span className="font-bold">{artistArray[0].name}</span>
                         , appearing on{" "}
-                        <span className="font-bold">{artistCounter[0][1]}</span>{" "}
+                        <span className="font-bold">
+                          {artistArray[0].count}
+                        </span>{" "}
                         songs
                       </BodyText>
 
                       <BodyText>
                         The artist that features the least is{" "}
                         <span className="font-bold">
-                          {artistCounter[artistCounter.length - 1][0]}
+                          {artistArray[artistArray.length - 1].name}
                         </span>
                         , appearing on{" "}
                         <span className="font-bold">
-                          {artistCounter[artistCounter.length - 1][1]}
+                          {artistArray[artistArray.length - 1].count}
                         </span>{" "}
                         songs
                       </BodyText>
@@ -267,20 +270,26 @@ function Result({ playlistData }: Props) {
 
           {/* CHARTS */}
 
-          <div className="w-full h-screen flex flex-col items-center bg-gradient-to-b from-gray-300 to-gray-100">
-            <div className="h-min w-min mt-10 px-12  whitespace-nowrap border-b-2 border-gray-400">
+          <div className="w-full h-screen flex flex-col justify-center items-center bg-gradient-to-b from-gray-300 to-gray-100">
+            {/* <div className="h-min w-min mt-2 bg-gray-400/10 whitespace-nowrap">
               <SubTitle>Charts</SubTitle>
-            </div>
-            <div className="bg-gray-400/10 rounded-2xl h-full w-9/10 m-10 p-2">
+            </div> */}
+            <div className="bg-gray-400/20 rounded-2xl h-8/10 w-8/10 m-10 p-2">
               <Carousel>
                 <div className="min-w-full flex justify-center items-center">
-                  <div className="size-9/10 bg-pink-300/10 flex justify-center items-center">
-                    <BarChartTest chartData={popularityArray}></BarChartTest>
+                  <div className="size-full flex flex-col justify-center items-center">
+                    <ChartTitle>Song Popularity Count</ChartTitle>
+
+                    {popularityArray[0] && (
+                      <BarChartTest chartData={popularityArray}></BarChartTest>
+                    )}
                   </div>
                 </div>
+
                 <div className="min-w-full">
                   <p>hello 2</p>
                 </div>
+
                 <div className="min-w-full">
                   <p>hello 3</p>
                 </div>

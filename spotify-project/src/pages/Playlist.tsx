@@ -76,7 +76,7 @@ function Playlist() {
     averagePopularity: string;
     mostPopularSong: (string | number)[];
     leastPopularSong: (string | number)[];
-    artistCounter: [string, number][];
+    artistArray: { name: string; count: number }[];
     genreCounter: [string, number][];
   }>({
     status: status,
@@ -94,7 +94,7 @@ function Playlist() {
     averagePopularity: "",
     mostPopularSong: [],
     leastPopularSong: [],
-    artistCounter: [],
+    artistArray: [],
     genreCounter: [],
   });
 
@@ -126,7 +126,8 @@ function Playlist() {
       let popularityCounter = 0;
       let mostPopularSongTemp = ["", -Infinity];
       let leastPopularSongTemp = ["", Infinity];
-      let artistCounterTemp: { [name: string]: number } = {};
+
+      let artistArrayTemp: { name: string; count: number }[] = [];
 
       const totalTracks = data?.data.tracks.total;
 
@@ -178,10 +179,14 @@ function Playlist() {
         // counting artists and constructing IDArray
         trackData.artists.forEach((artist: any) => {
           let artistName = artist.name;
-          if (artistName in artistCounterTemp) {
-            artistCounterTemp[artistName] += 1;
+          let foundEntry = artistArrayTemp.find(
+            (entry) => entry.name === artistName
+          );
+
+          if (foundEntry) {
+            foundEntry.count += 1;
           } else {
-            artistCounterTemp[artistName] = 1;
+            artistArrayTemp.push({ name: artistName, count: 1 });
 
             if (IDArray.length < 50) {
               IDArray.push(artist.id);
@@ -201,11 +206,6 @@ function Playlist() {
 
       // calculate average popularity
       let averagePopularityTemp = (popularityCounter / totalTracks).toFixed(2);
-
-      // most to least popular artists, object to array
-      let artistCounterTempArray = Object.entries(artistCounterTemp).sort(
-        ([, a], [, b]) => b - a
-      );
 
       setArtistEndpoint(
         "https://api.spotify.com/v1/artists?ids=" + IDArray.join(",")
@@ -229,7 +229,7 @@ function Playlist() {
         averagePopularity: averagePopularityTemp,
         mostPopularSong: mostPopularSongTemp,
         leastPopularSong: leastPopularSongTemp,
-        artistCounter: artistCounterTempArray,
+        artistArray: artistArrayTemp.sort((a, b) => b.count - a.count),
         genreCounter: [],
       });
     }
@@ -284,7 +284,7 @@ function Playlist() {
         genreCounter: genreCounterTempArray,
       }));
     }
-  }, [artistQuery.status, artistQuery.data]);
+  }, [status, data, artistQuery.status, artistQuery.data]);
 
   return <Result playlistData={playlistData} />;
 }
