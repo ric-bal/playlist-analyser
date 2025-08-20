@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { getPlaylist } from "../api/getPlaylist";
-import Result from "./Result";
-import { getArtist } from "../api/getArtist";
+import { getPlaylist } from "./getPlaylist";
+import Result from "../pages/Result";
+import { getArtist } from "./getArtist";
+import { useLocation } from "react-router-dom";
 
 function msToTime(duration: any, options: { showHours: boolean }) {
   let seconds = Math.floor((duration / 1000) % 60);
@@ -30,7 +31,7 @@ function errorMessageHandler(isError: boolean, error: Error | null) {
   if (isError) {
     if (axios.isAxiosError(error)) {
       const statusNumber = error.response?.status;
-      console.log(statusNumber);
+
       if (statusNumber === 400) {
         errorMessage = "Playlist data not found";
       } else if (statusNumber === 401) {
@@ -50,14 +51,16 @@ function errorMessageHandler(isError: boolean, error: Error | null) {
 
 function Playlist() {
   const [artistEndpoint, setArtistEndpoint] = useState("");
+  const { state } = useLocation(); // data from SearchBar.tsx
 
   // ===== EXTRACTING SURFACE LEVEL PLAYLIST DATA =====
 
   // requesting playlist data
   const { status, data, error, isError } = useQuery({
     queryKey: ["playlistDataQueryKey"],
-    queryFn: getPlaylist,
+    queryFn: () => getPlaylist(state),
     retry: false,
+    gcTime: 0,
   });
 
   const [playlistData, setPlaylistData] = useState<{
@@ -77,7 +80,7 @@ function Playlist() {
     mostPopularSong: (string | number)[];
     leastPopularSong: (string | number)[];
     artistArray: { name: string; count: number }[];
-    genreCounter: [string, number][];
+    genreArray: { genre: string; count: number; fill: string }[];
   }>({
     status: status,
     errorMessage: "",
@@ -95,7 +98,7 @@ function Playlist() {
     mostPopularSong: [],
     leastPopularSong: [],
     artistArray: [],
-    genreCounter: [],
+    genreArray: [],
   });
 
   // error message handling
@@ -131,7 +134,7 @@ function Playlist() {
 
       const totalTracks = data?.data.tracks.total;
 
-      for (let i = 0; i < totalTracks; i++) {
+      for (let i = 0; i < Math.min(100, totalTracks); i++) {
         // individual song data
         const trackData = data?.data.tracks.items[i].track;
 
@@ -177,7 +180,7 @@ function Playlist() {
         }
 
         // counting artists and constructing IDArray
-        trackData.artists.forEach((artist: any) => {
+        for (let artist of trackData.artists) {
           let artistName = artist.name;
           let foundEntry = artistArrayTemp.find(
             (entry) => entry.name === artistName
@@ -192,7 +195,7 @@ function Playlist() {
               IDArray.push(artist.id);
             }
           }
-        });
+        }
       }
 
       // convert shortest and longest times to m:s format
@@ -230,7 +233,7 @@ function Playlist() {
         mostPopularSong: mostPopularSongTemp,
         leastPopularSong: leastPopularSongTemp,
         artistArray: artistArrayTemp.sort((a, b) => b.count - a.count),
-        genreCounter: [],
+        genreArray: [],
       });
     }
   }, [status, data]);
@@ -260,28 +263,38 @@ function Playlist() {
 
   // extracting data
   useEffect(() => {
-    let genreCounterTemp: { [name: string]: number } = {};
+    let genreArrayTemp: { genre: string; count: number; fill: string }[] = [];
 
     if (!artistQuery.isError && artistQuery.data) {
       // counting genres
-      artistQuery.data?.data.artists.forEach((artist: any) => {
-        artist.genres.forEach((genre: string) => {
-          if (genre in genreCounterTemp) {
-            genreCounterTemp[genre] += 1;
-          } else {
-            genreCounterTemp[genre] = 1;
-          }
-        });
-      });
+      for (let artist of artistQuery.data?.data.artists) {
+        for (let genre of artist.genres) {
+          let foundEntry = genreArrayTemp.find(
+            (entry) => entry.genre === genre
+          );
 
-      // most to least popular genres, object to array
-      let genreCounterTempArray = Object.entries(genreCounterTemp).sort(
-        ([, a], [, b]) => b - a
-      );
+          if (foundEntry) {
+            foundEntry.count += 1;
+          } else {
+            genreArrayTemp.push({
+              genre: genre,
+              count: 1,
+              fill: "",
+            });
+          }
+        }
+      }
+
+      genreArrayTemp = genreArrayTemp.sort((a, b) => b.count - a.count);
+
+      let i = 0;
+      genreArrayTemp.forEach((array) => {
+        (array.fill = "var(--color-" + i.toString() + ")"), (i = (i + 1) % 5);
+      });
 
       setPlaylistData((prev) => ({
         ...prev,
-        genreCounter: genreCounterTempArray,
+        genreArray: genreArrayTemp.sort((a, b) => b.count - a.count),
       }));
     }
   }, [status, data, artistQuery.status, artistQuery.data]);

@@ -28,7 +28,7 @@ export default function Component({ chartData }: Props) {
   const chartConfig = {
     xlabel: {
       label: "No. of songs: ",
-      color: "#2563eb",
+      color: "#818cf8",
     },
   } satisfies ChartConfig;
 
@@ -36,13 +36,14 @@ export default function Component({ chartData }: Props) {
     <>
       <ChartContainer config={chartConfig} className="size-7/10">
         <BarChart accessibilityLayer data={chartData}>
-          <CartesianGrid vertical={true} />
+          <CartesianGrid vertical={true} horizontal={true} strokeWidth={2} />
           <XAxis
             dataKey={keys[0]}
             tickLine={true}
             tickMargin={10}
             axisLine={true}
             tickFormatter={(value) => value.slice(0, 2)}
+            className="font-bold text-sm"
           />
           <ChartTooltip content={<ChartTooltipContent nameKey="xlabel" />} />
 

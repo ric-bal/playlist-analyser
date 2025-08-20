@@ -15,9 +15,9 @@ function Home() {
             !fadeout ? "animate-appear" : "animate-disappear"
           } w-full h-screen flex flex-col items-center justify-center space-y-5`}
         >
-          <Title>Test Text</Title>
-          <BodyText>Flavor text below header</BodyText>
-          <SearchBar setFadeout={setFadeout}></SearchBar>
+          <Title>Playlist Analyser</Title>
+          <BodyText>Enter a Spotify public playlist URL </BodyText>
+          <SearchBar setFadeout={setFadeout} />
         </div>
       </div>
     </>
