@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
+// import { AiOutlineSearch } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
@@ -40,7 +40,7 @@ function SearchBar({ setFadeout }: Props) {
             type="search"
             name="playlistID"
             placeholder="enter url"
-            className="w-full p-4 rounded-full bg-gray-300 text-xl focus:ring-2 focus:ring-gray-400 focus:outline-none"
+            className="w-full p-4 rounded-full bg-gray-300 text-xl focus:ring-2 focus:ring-gray-400 focus:outline-none placeholder: text-center"
             value={playlistURL}
             onChange={(e) => setPlaylistURL(e.target.value)}
           />
@@ -48,12 +48,14 @@ function SearchBar({ setFadeout }: Props) {
             type="submit"
             className="absolute right-1 top-1/2 -translate-y-1/2 p-4 rounded-full"
           >
-            <AiOutlineSearch />
+            {/* <div className="rounded-full bg-gray-400/50 p-1">
+              <AiOutlineSearch className="size-5" />
+            </div> */}
           </button>
         </div>
       </form>
 
-      <p className="text-xl h-5">{failed && "Invalid URL"}</p>
+      <p className="text-xl font-semibold h-5">{failed && "Invalid URL"}</p>
     </>
   );
 }

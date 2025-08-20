@@ -95,7 +95,7 @@ function Result({ playlistData }: Props) {
                 </div>
 
                 {/* text */}
-                <div className="w-1/2 h-min flex flex-col justify-center p-20 bg-gray-300/30 rounded-2xl">
+                <div className="w-1/2 h-min max-h-screen overflow-y-scroll flex flex-col justify-center p-20 bg-gray-300/30 rounded-2xl">
                   <PlaylistTitle>{title}</PlaylistTitle>
                   <Return setFadeout={setFadeout} delay={true} />
 
@@ -260,7 +260,7 @@ function Result({ playlistData }: Props) {
                     </div>
                   )}
 
-                  <div className="flex justify-center pt-10">
+                  <div className="flex justify-center pt-3">
                     <FaAngleDown className="size-7 fill-gray-600" />
                   </div>
                 </div>

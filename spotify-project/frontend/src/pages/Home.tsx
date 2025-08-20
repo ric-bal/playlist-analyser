@@ -2,6 +2,7 @@ import Title from "../components/Title";
 import BodyText from "../components/SubText";
 import SearchBar from "../components/SearchBar";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [fadeout, setFadeout] = useState(false);
@@ -18,6 +19,18 @@ function Home() {
           <Title>Playlist Analyser</Title>
           <BodyText>Enter a Spotify public playlist URL </BodyText>
           <SearchBar setFadeout={setFadeout} />
+
+          <div className="flex flex-col items-center justify-center absolute bottom-0">
+            <div className="pb-2">
+              <p>
+                Made with the Spotify Web API / React + Tailwind / Node.js +
+                Express
+              </p>
+            </div>
+            <div className="pb-12 underline text-gray-600">
+              <Link to="#">Github</Link>
+            </div>
+          </div>
         </div>
       </div>
     </>

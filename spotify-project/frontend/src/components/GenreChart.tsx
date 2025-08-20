@@ -12,52 +12,23 @@ import {
 interface Props {
   chartData: any;
 }
-// const chartData = [
-//   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-//   { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-//   { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-//   { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-//   { browser: "other", visitors: 90, fill: "var(--color-other)" },
-// ];
-
-// function RandomHexValue() {
-//   let rgb1 = [29, 78, 216];
-//   let rgb2 = [168, 85, 247];
-
-//   let rgb3 = [];
-//   for (var i = 0; i < 3; i++)
-//     rgb3[i] = (rgb1[i] + Math.random() * (rgb2[i] - rgb1[i])) | 0;
-
-//   var newColor =
-//     "#" +
-//     rgb3
-//       .map(function (n) {
-//         return n.toString(16);
-//       })
-//       .map(function (s) {
-//         return "00".slice(s.length) + s;
-//       })
-//       .join("");
-
-//   return newColor;
-// }
 
 export default function ChartPieLabel({ chartData }: Props) {
   const chartConfig = {
     0: {
-      color: "#ef4444",
+      color: "#818cf8",
     },
     1: {
-      color: "#f59e0b",
+      color: "#6366f1",
     },
     2: {
-      color: "#10b981",
+      color: "#4f46e5",
     },
     3: {
-      color: "#3b82f6",
+      color: "#4338ca",
     },
     4: {
-      color: "#a855f7",
+      color: "#3730a3",
     },
   } satisfies ChartConfig;
 

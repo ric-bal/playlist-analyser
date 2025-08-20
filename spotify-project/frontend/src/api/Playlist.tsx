@@ -217,7 +217,10 @@ function Playlist() {
       setPlaylistData({
         status,
         errorMessage: "",
-        title: data.data.name,
+        title: data.data.name.replace(
+          /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
+          ""
+        ), // remove emojis
         creator: data.data.owner.display_name,
         desc: data.data.description,
         coverURL: data.data.images[0].url,
