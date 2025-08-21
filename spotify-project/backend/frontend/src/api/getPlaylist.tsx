@@ -1,7 +1,7 @@
-import axiosInstance from "./axiosInstance";
+import axios from "axios";
 
 export async function getPlaylist(id: string) {
-  const response = await axiosInstance.get("/api/get_playlist", {
+  const response = await axios.get("/api/get_playlist", {
     params: { id },
   });
 

@@ -1,7 +1,7 @@
-import axiosInstance from "./axiosInstance";
+import axios from "axios";
 
 export async function getArtist(endpoint: string) {
-  const response = await axiosInstance.get("/api/get_artist", {
+  const response = await axios.get("/api/get_artist", {
     params: { endpoint },
   });
 

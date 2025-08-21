@@ -37,7 +37,7 @@ const refreshToken = async () => {
 
     for (let i = 0; i < retryCount; i++) {
         try {
-            const response = await post(
+            const response = await axios.post(
                 "https://accounts.spotify.com/api/token",
                 "grant_type=client_credentials",
                 {
@@ -104,6 +104,5 @@ router.get('/api/get_artist', async (req, res) => {
     
     res.send(response.data)
 })
-
 
 export default router

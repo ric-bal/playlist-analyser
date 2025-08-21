@@ -7,6 +7,7 @@ const { json, urlencoded } = pkg;
 import router from './routes/router.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+const PORT = process.env.PORT || 4000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,11 +19,8 @@ app.use(urlencoded({extended:false}));
 // use frontend app
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
-// render client for any path
-app.use("/{*any}", (req, res) => res.sendFile(path.join(__dirname, "/frontend/dist/index.html")))
-
 const corsOptions = {
-    origins: "https://playlist-analyser.onrender.com",
+    origins: 'https://playlist-analyser.onrender.com', // 
     credentials: true,
     optionsSuccessStatus: 200
 }
@@ -30,7 +28,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use('/', router);
 
-const PORT = 4000; // backend routing port
+// render client for any path
+app.use("/{*any}", (req, res) => res.sendFile(path.join(__dirname, "/frontend/dist/index.html")))
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
 });
