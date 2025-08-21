@@ -2,7 +2,7 @@ import axiosInstance from "./axiosInstance";
 
 export async function getPlaylist(id: string) {
   const response = await axiosInstance.get(
-    "http://localhost:4000/api/get_playlist",
+    "https://playlist-analyser.onrender.com/api/get_playlist",
     {
       params: { id },
     }

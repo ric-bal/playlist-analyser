@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
 const corsOptions = {
-    origins: '*',
+    origins: "https://playlist-analyser.onrender.com",
     credentials: true,
     optionsSuccessStatus: 200
 }
