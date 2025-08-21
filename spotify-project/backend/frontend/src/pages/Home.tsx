@@ -28,7 +28,9 @@ function Home() {
               </p>
             </div>
             <div className="pb-12 underline text-gray-600">
-              <Link to="#">Github</Link>
+              <Link to="https://github.com/ric-bal/playlist-analyser">
+                Github
+              </Link>
             </div>
           </div>
         </div>
