@@ -1,14 +1,15 @@
-require('dotenv-safe').config();
+import { config } from 'dotenv-safe';
+config();
 
 const storage = new Map();
 
-const axios = require('axios');
+import axios from 'axios';
 const axiosInstance = axios.create({
   baseURL: "https://api.spotify.com/v1",
 });
 
-const express = require('express');
-const router = express.Router()
+import { Router } from 'express';
+const router = Router()
 
 // managing token
 const clientID = process.env.SPOTIFY_CLIENT_ID;
@@ -36,7 +37,7 @@ const refreshToken = async () => {
 
     for (let i = 0; i < retryCount; i++) {
         try {
-            const response = await axios.post(
+            const response = await post(
                 "https://accounts.spotify.com/api/token",
                 "grant_type=client_credentials",
                 {
@@ -105,4 +106,4 @@ router.get('/api/get_artist', async (req, res) => {
 })
 
 
-module.exports = router
+export default router

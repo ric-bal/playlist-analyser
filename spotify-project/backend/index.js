@@ -1,11 +1,25 @@
-const express = require('express');
-const cors = require('cors')
-const bodyParser = require('body-parser');
-const router = require('./routes/router.js');
+import express from 'express';
+import cors from 'cors';
+
+import pkg from 'body-parser';
+const { json, urlencoded } = pkg;
+
+import router from './routes/router.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(json());
+app.use(urlencoded({extended:false}));
+
+// use frontend app
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+// render client for any path
+app.use("/{*any}", (req, res) => res.sendFile(path.join(__dirname, "/frontend/dist/index.html")))
 
 const corsOptions = {
     origins: "https://playlist-analyser.onrender.com",
