@@ -65,7 +65,7 @@ const refreshToken = async () => {
 // ROUTES
 
 // playlist
-router.get('/api/get_playlist', async (req, res) => {
+router.get('/api/get_playlist', async (req, res) => {    
     const params = new URLSearchParams(req.query);
 
     if (isTokenExpired()) {
@@ -75,7 +75,7 @@ router.get('/api/get_playlist', async (req, res) => {
     let token = storage.get("token");
     
     const response = await axiosInstance.get(
-        "https://api.spotify.com/v1/playlists/" + params.get("id"), // 3cEYpjA9oz9GiPac4AsH4n or 0giwPznzYlCJ9O7g8mhhmP
+        "https://api.spotify.com/v1/playlists/" + params.get("id"),
         {
         headers: {
             Authorization: `Bearer ${token}`,

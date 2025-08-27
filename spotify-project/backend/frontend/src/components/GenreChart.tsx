@@ -39,7 +39,7 @@ export default function ChartPieLabel({ chartData }: Props) {
     <>
       <ChartContainer
         config={chartConfig}
-        className="[&_.recharts-pie-label-text]:fill-foreground mx-auto aspect-square size-7/10"
+        className="[&_.recharts-pie-label-text]:fill-foreground mx-auto aspect-square lg:size-full size-7/10"
       >
         <PieChart>
           <ChartTooltip content={<ChartTooltipContent hideLabel />} />

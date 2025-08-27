@@ -64,13 +64,17 @@ function Carousel({ children }: Props) {
       </div>
 
       {/* indicators */}
-      <div className="absolute bottom-4 right-0 left-0">
+      <div className="absolute lg:bottom-2 bottom-4 right-0 left-0">
         <div className="flex items-center justify-center gap-2">
           {[0, 1, 2].map((_, i) => (
             <div
               className={`
             transition-all bg-gray-400 rounded-full
-            ${currentSlide === i ? "size-5" : "size-[1.05rem] bg-gray-400/60"}
+            ${
+              currentSlide === i
+                ? "lg:size-3 size-5"
+                : "lg:size-[0.6rem] size-[1.05rem] bg-gray-400/60"
+            }
             `}
               key={i}
             />

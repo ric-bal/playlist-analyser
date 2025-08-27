@@ -29,7 +29,7 @@ function Return({ setFadeout, delay }: Props) {
     <>
       <Link to="/" onClick={handleRedirect} className="flex items-center">
         <SlArrowLeft className="relative top-0.5 pr-1.5 h-5 w-5" />
-        <p className="text-2xl text-gray-600">Return home</p>
+        <p className="lg:text-sm text-2xl text-gray-600">Return home</p>
       </Link>
     </>
   );

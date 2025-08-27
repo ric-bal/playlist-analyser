@@ -14,18 +14,16 @@ function Home() {
         <div
           className={`${
             !fadeout ? "animate-appear" : "animate-disappear"
-          } w-full h-screen flex flex-col items-center justify-center space-y-5`}
+          } w-full h-screen flex flex-col items-center justify-center space-y-5 overflow-hidden`}
         >
           <Title>Playlist Analyser</Title>
           <BodyText>Enter a Spotify public playlist URL </BodyText>
           <SearchBar setFadeout={setFadeout} />
 
           <div className="flex flex-col items-center justify-center absolute bottom-0">
-            <div className="pb-2">
-              <p>
-                Made with the Spotify Web API / React + Tailwind / Node.js +
-                Express
-              </p>
+            <div className="pb-2 sm:w-85 sm:text-center">
+              Made with the Spotify Web API / React + Tailwind / Node.js +
+              Express
             </div>
             <div className="pb-12 underline text-gray-600">
               <Link to="https://github.com/ric-bal/playlist-analyser">

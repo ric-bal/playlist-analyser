@@ -4,7 +4,9 @@ interface Props {
 
 function EmphasisSubText({ children }: Props) {
   return (
-    <p className="text-[1.5rem] text-gray-600 italic font-[600]">{children}</p>
+    <p className="lg:text-sm text-[1.5rem] text-gray-600 italic font-[600]">
+      {children}
+    </p>
   );
 }
 

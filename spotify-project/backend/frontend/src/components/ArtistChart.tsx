@@ -36,7 +36,10 @@ export default function Component({ chartData }: Props) {
 
   return (
     <>
-      <ChartContainer config={chartConfig} className="size-7/10">
+      <ChartContainer
+        config={chartConfig}
+        className="lg:h-7/10 lg:w-8/10 size-7/10"
+      >
         <BarChart
           accessibilityLayer
           data={chartData}
@@ -67,7 +70,7 @@ export default function Component({ chartData }: Props) {
               dataKey={keys[0]}
               position="right"
               offset={8}
-              className="fill-(--color-insideText) text-sm font-bold"
+              className="fill-(--color-insideText) lg:text-[0.4rem] text-sm font-bold"
               fontSize={12}
             />
           </Bar>

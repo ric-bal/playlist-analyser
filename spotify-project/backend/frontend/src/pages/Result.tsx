@@ -9,13 +9,14 @@ import SubTitle from "../components/SubTitle";
 import { Link } from "react-router-dom";
 import Break from "../components/Break";
 import { FaAngleDown } from "react-icons/fa";
+import { AiOutlineRotateRight } from "react-icons/ai";
 import Carousel from "../components/Carousel";
 import PopularityChart from "../components/PopularityChart";
 import ChartTitle from "@/components/ChartTitle";
 import ArtistChart from "@/components/ArtistChart";
 import GenreChart from "@/components/GenreChart";
 import { useState } from "react";
-import SubText from "@/components/SubText";
+import Desc from "@/components/Desc";
 
 type Props = {
   playlistData: {
@@ -79,64 +80,71 @@ function Result({ playlistData }: Props) {
           </div>
         )) ||
           (status === "success" && (
-            <div
-              className={`${
-                !fadeout ? "animate-appear" : "animate-disappear"
-              } w-full h-screen flex flex-col items-center justify-center space-y-5 snap-center`}
-            >
-              <div className="w-9/10 h-8/10 m-auto items-center py-10 pl-30 flex">
-                {/* image */}
-                <div className="w-2/5 h-full flex items-center justify-center pr-20">
-                  <img
-                    src={coverURL || undefined}
-                    alt="Playlist cover"
-                    className="h-66/100 w-85/100 drop-shadow-lg/25"
-                  ></img>
-                </div>
+            <>
+              <div className="animate-appear landscape:hidden w-full h-screen flex flex-col items-center justify-center space-y-5 snap-center">
+                <Error>Please rotate your device</Error>
+                <AiOutlineRotateRight className="relative size-10 fill-gray-500" />
+              </div>
 
-                {/* text */}
-                <div className="w-1/2 h-min max-h-screen overflow-y-scroll flex flex-col justify-center p-20 bg-gray-300/30 rounded-2xl">
-                  <PlaylistTitle>{title}</PlaylistTitle>
-                  <Return setFadeout={setFadeout} delay={true} />
-
-                  <hr className="my-12 rounded-lg h-0.5 border-1 border-gray-500"></hr>
-
-                  <BodyText>
-                    Made by <span className="italic">{creator}</span>
-                  </BodyText>
-                  <div className="pt-2">
-                    <SubText>
-                      {desc === "" ? "This playlist has no description" : desc}
-                    </SubText>
+              <div
+                className={`${
+                  !fadeout ? "animate-appear" : "animate-disappear"
+                } lg:portrait:hidden w-full h-screen flex flex-col items-center justify-center space-y-5 snap-center`}
+              >
+                <div className="w-9/10 h-8/10 m-auto items-center py-10 pl-30 flex">
+                  {/* image */}
+                  <div className="w-2/5 h-full flex items-center justify-center pr-20">
+                    <img
+                      src={coverURL || undefined}
+                      alt="Playlist cover"
+                      className="h-66/100 w-85/100 drop-shadow-lg/25"
+                    ></img>
                   </div>
+                  {/* text */}
+                  <div className="w-1/2 h-min max-h-screen overflow-y-scroll flex flex-col justify-center p-20 bg-gray-300/30 rounded-2xl">
+                    <PlaylistTitle>{title}</PlaylistTitle>
+                    <Return setFadeout={setFadeout} delay={true} />
 
-                  <div className="flex pt-10">
-                    {/* <SlArrowDownCircle className="relative top-1.5 pr-2.5 h-7 w-7" /> */}
-                    <FaAngleDown className="relative top-2 pr-2.5 size-6 fill-gray-600" />
+                    <hr className="lg:my-5 my-12 rounded-lg h-0.5 border-1 border-gray-500"></hr>
 
-                    <EmphasisSubText>
-                      Scroll for more information
-                    </EmphasisSubText>
+                    <BodyText>
+                      Made by <span className="italic">{creator}</span>
+                    </BodyText>
+                    <div className="pt-2">
+                      <span className="lg:text-sm">
+                        <Desc>
+                          {desc === ""
+                            ? "This playlist has no description"
+                            : desc}
+                        </Desc>
+                      </span>
+                    </div>
 
-                    <FaAngleDown className="relative top-2 pl-2.5 size-6 fill-gray-600" />
-                    {/* <SlArrowDownCircle className="relative top-1.5 pl-2.5 h-7 w-7" /> */}
+                    <div className="flex pt-10">
+                      {/* <SlArrowDownCircle className="relative top-1.5 pr-2.5 h-7 w-7" /> */}
+                      <FaAngleDown className="relative top-2 pr-2.5 size-6 fill-gray-600" />
+
+                      <EmphasisSubText>
+                        Scroll for more information
+                      </EmphasisSubText>
+
+                      <FaAngleDown className="relative top-2 pl-2.5 size-6 fill-gray-600" />
+                      {/* <SlArrowDownCircle className="relative top-1.5 pl-2.5 h-7 w-7" /> */}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </>
           ))}
       </div>
 
       {status === "success" && (
-        <>
+        <div className="lg:portrait:hidden">
           {/* BASIC INFO */}
 
           <div className="w-full h-screen flex flex-col items-center justify-center space-y-5 bg-gray-300 snap-center">
             <div className="w-9/10 h-9/10 py-5 flex">
-              <div
-                className="w-1/2 h-full mx-10 flex flex-col p-10"
-                data-aos="fade-in"
-              >
+              <div className="lg:w-full w-1/2 h-full lg:mx-0 mx-10 flex flex-col lg:p-0 p-10">
                 <div className="w-min h-min whitespace-nowrap">
                   <SubTitle>Basic Info</SubTitle>
                 </div>
@@ -170,7 +178,7 @@ function Result({ playlistData }: Props) {
                     <span className="font-bold">{averagePopularity}</span> out
                     of <span className="font-bold">100</span>
                     <br></br>
-                    <span className="text-xl">
+                    <span className="lg:text-[0.6rem] text-xl">
                       For more information on popularity, visit the{" "}
                       <span className="underline">
                         <Link to="https://developer.spotify.com/documentation/web-api/reference/get-track">
@@ -266,7 +274,7 @@ function Result({ playlistData }: Props) {
                 </div>
               </div>
 
-              <div className="w-1/2 h-9/10 mx-10 my-auto flex flex-wrap content-start overflow-hidden">
+              <div className="lg:hidden w-1/2 h-9/10 mx-10 my-auto flex flex-wrap content-start overflow-hidden">
                 {songCoverURLs.map((url, i) => (
                   <img
                     src={url === "placeholder" ? placeholder : url}
@@ -289,6 +297,7 @@ function Result({ playlistData }: Props) {
             <div className="h-min w-min pb-0 whitespace-nowrap">
               <SubTitle>Charts</SubTitle>
             </div>
+
             <div className="bg-gray-400/20 rounded-2xl h-8/10 w-8/10 mt-5">
               <Carousel>
                 <div className="min-w-full flex justify-center items-center">
@@ -325,7 +334,7 @@ function Result({ playlistData }: Props) {
               </Carousel>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

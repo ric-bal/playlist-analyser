@@ -35,12 +35,12 @@ function SearchBar({ setFadeout }: Props) {
   return (
     <>
       <form onSubmit={handleSubmit} className="w-[440px] relative">
-        <div className="relative">
+        <div className="relative flex justify-center">
           <input
             type="search"
             name="playlistID"
             placeholder="enter url"
-            className="w-full p-4 rounded-full bg-gray-300 text-xl focus:ring-2 focus:ring-gray-400 focus:outline-none placeholder: text-center"
+            className="sm:w-7/10 w-full p-4 rounded-full bg-gray-300 text-xl focus:ring-2 focus:ring-gray-400 focus:outline-none placeholder: text-center"
             value={playlistURL}
             onChange={(e) => setPlaylistURL(e.target.value)}
           />
