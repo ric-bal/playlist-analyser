@@ -101,8 +101,10 @@ function Result({ playlistData }: Props) {
                     ></img>
                   </div>
                   {/* text */}
-                  <div className="w-1/2 h-min max-h-screen overflow-y-scroll flex flex-col justify-center p-20 bg-gray-300/30 rounded-2xl">
-                    <PlaylistTitle>{title}</PlaylistTitle>
+                  <div className="w-1/2 h-min max-h-screen overflow-y-scroll flex flex-col justify-center lg:p-5 p-20 bg-gray-300/30 rounded-2xl">
+                    <PlaylistTitle>
+                      {title === "" ? "[String of emojis]" : title}
+                    </PlaylistTitle>
                     <Return setFadeout={setFadeout} delay={true} />
 
                     <hr className="lg:my-5 my-12 rounded-lg h-0.5 border-1 border-gray-500"></hr>
@@ -122,13 +124,13 @@ function Result({ playlistData }: Props) {
 
                     <div className="flex pt-10">
                       {/* <SlArrowDownCircle className="relative top-1.5 pr-2.5 h-7 w-7" /> */}
-                      <FaAngleDown className="relative top-2 pr-2.5 size-6 fill-gray-600" />
+                      <FaAngleDown className="relative lg:top-0 top-2 pr-2.5 lg:size-5 size-6 fill-gray-600" />
 
                       <EmphasisSubText>
                         Scroll for more information
                       </EmphasisSubText>
 
-                      <FaAngleDown className="relative top-2 pl-2.5 size-6 fill-gray-600" />
+                      <FaAngleDown className="relative lg:top-0 top-2 pl-2.5 lg:size-5 size-6 fill-gray-600" />
                       {/* <SlArrowDownCircle className="relative top-1.5 pl-2.5 h-7 w-7" /> */}
                     </div>
                   </div>
@@ -144,8 +146,8 @@ function Result({ playlistData }: Props) {
 
           <div className="w-full h-screen flex flex-col items-center justify-center space-y-5 bg-gray-300 snap-center">
             <div className="w-9/10 h-9/10 py-5 flex">
-              <div className="lg:w-full w-1/2 h-full lg:mx-0 mx-10 flex flex-col lg:p-0 p-10">
-                <div className="w-min h-min whitespace-nowrap">
+              <div className="lg:w-75/100 w-1/2 h-full lg:mx-auto mx-10 flex flex-col lg:p-0 p-10">
+                <div className="lg:pb-2 w-min h-min whitespace-nowrap">
                   <SubTitle>Basic Info</SubTitle>
                 </div>
                 <div className="bg-gray-400/10 w-full h-full rounded-2xl p-5 overflow-y-scroll">
@@ -293,12 +295,12 @@ function Result({ playlistData }: Props) {
 
           {/* CHARTS */}
 
-          <div className="w-full h-screen flex flex-col justify-center items-center bg-gradient-to-b from-gray-300 to-gray-100 snap-center">
-            <div className="h-min w-min pb-0 whitespace-nowrap">
+          <div className="w-full h-screen flex flex-col items-center bg-gradient-to-b from-gray-300 to-gray-100 snap-center">
+            <div className="h-min w-min lg:pt-1 pb-0 whitespace-nowrap">
               <SubTitle>Charts</SubTitle>
             </div>
 
-            <div className="bg-gray-400/20 rounded-2xl h-8/10 w-8/10 mt-5">
+            <div className="bg-gray-400/20 rounded-2xl h-8/10 lg:w-7/10 w-8/10 mt-5">
               <Carousel>
                 <div className="min-w-full flex justify-center items-center">
                   <div className="size-full flex flex-col justify-center items-center">

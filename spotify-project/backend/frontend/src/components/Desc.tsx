@@ -3,7 +3,7 @@ interface Props {
 }
 
 function Desc({ children }: Props) {
-  return <p className="lg:text-sm text-2xl text-gray-600">{children}</p>;
+  return <p className="lg:text-[0.6rem] text-2xl text-gray-600">{children}</p>;
 }
 
 export default Desc;

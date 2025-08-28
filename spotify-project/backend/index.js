@@ -16,7 +16,7 @@ const app = express();
 app.use(json());
 app.use(urlencoded({extended:false}));
 
-// use frontend app
+// use frontend app [a]
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
 const corsOptions = {
@@ -28,7 +28,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use('/', router);
 
-// render client for any path
+// render client for any path [b]
 app.use("/{*any}", (req, res) => res.sendFile(path.join(__dirname, "/frontend/dist/index.html")))
 
 app.listen(PORT, () => {
@@ -39,8 +39,15 @@ app.listen(PORT, () => {
 
 /* 
 
-To revert back to prod state:
-1. uncomment commented code in index.js
-2. set axios.get() url to "/api/get_[]" in getPlaylist and getArtist
+For prod:
+1. uncomment code labelled with [a] and [b] in index.js
+2. set axios.get() url from "http://localhost:4000/api/get_[]" to "/api/get_[]" in getPlaylist and getArtist
+3. run 'npm run build' in frontend
+
+For dev, reverse steps 1 and 2 
+
+backend - 'npm start'
+frontend - 'npm run dev'
+
 
 */

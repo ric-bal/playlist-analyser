@@ -35,6 +35,18 @@ export default function ChartPieLabel({ chartData }: Props) {
   let keys = Object.keys(chartData[0]);
   chartData = chartData.slice(0, 10);
 
+  let vw = Math.max(
+    document.documentElement.clientWidth || 0,
+    window.innerWidth || 0
+  );
+
+  let textSize = 20;
+  let textSizeAdjust = 1;
+  if (vw <= 1535) {
+    textSize = 10;
+    textSizeAdjust = 0.3;
+  }
+
   return (
     <>
       <ChartContainer
@@ -48,13 +60,14 @@ export default function ChartPieLabel({ chartData }: Props) {
             dataKey={keys[1]}
             label
             labelLine={true}
-            fontSize={20}
+            fontSize={textSize}
             fontWeight={"bold"}
             nameKey={keys[0]}
           >
             <LabelList
               dataKey={keys[0]}
               className="fill-background size-min"
+              fontSizeAdjust={textSizeAdjust}
               stroke="none"
               fontSize={"auto"}
             />

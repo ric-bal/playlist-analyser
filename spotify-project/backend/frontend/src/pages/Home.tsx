@@ -21,11 +21,11 @@ function Home() {
           <SearchBar setFadeout={setFadeout} />
 
           <div className="flex flex-col items-center justify-center absolute bottom-0">
-            <div className="pb-2 sm:w-85 sm:text-center">
+            <div className="lg:pb-1 pb-2 sm:w-85 sm:text-center">
               Made with the Spotify Web API / React + Tailwind / Node.js +
               Express
             </div>
-            <div className="pb-12 underline text-gray-600">
+            <div className="lg:pb-1 pb-12 underline text-gray-600">
               <Link to="https://github.com/ric-bal/playlist-analyser">
                 Github
               </Link>

@@ -50,7 +50,7 @@ export default function Component({ chartData }: Props) {
           <Bar dataKey={keys[1]} fill="var(--color-xlabel)" radius={4} />
         </BarChart>
       </ChartContainer>
-      <p className="text-gray-600 font-semibold text-lg">
+      <p className="text-gray-600 font-semibold lg:text-sm text-lg">
         Popularity (to nearest 10)
       </p>
     </>

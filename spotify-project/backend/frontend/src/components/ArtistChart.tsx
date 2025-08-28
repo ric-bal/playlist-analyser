@@ -24,6 +24,16 @@ export default function Component({ chartData }: Props) {
   let keys = Object.keys(chartData[0]);
   chartData = chartData.slice(0, 25);
 
+  let vw = Math.max(
+    document.documentElement.clientWidth || 0,
+    window.innerWidth || 0
+  );
+
+  let rightMargin = 150;
+  if (vw <= 1535) {
+    rightMargin = 0;
+  }
+
   const chartConfig = {
     xLabel: {
       label: "No. of songs: ",
@@ -45,7 +55,7 @@ export default function Component({ chartData }: Props) {
           data={chartData}
           layout="vertical"
           margin={{
-            right: 150,
+            right: rightMargin,
           }}
         >
           <CartesianGrid horizontal={true} vertical={true} strokeWidth={2} />
@@ -76,7 +86,9 @@ export default function Component({ chartData }: Props) {
           </Bar>
         </BarChart>
       </ChartContainer>
-      <p className="text-gray-600 font-semibold text-lg">Top 25 Artists</p>
+      <p className="text-gray-600 font-semibold lg:text-sm text-lg">
+        Top 25 Artists
+      </p>
     </>
   );
 }

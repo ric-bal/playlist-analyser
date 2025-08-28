@@ -40,8 +40,8 @@ function Carousel({ children }: Props) {
           <FaAngleLeft
             className={
               currentSlide === 0
-                ? "size-15 fill-gray-300"
-                : "size-15 fill-gray-500 hover:fill-gray-600 active:fill-gray-800"
+                ? "lg:size-10 size-15 fill-gray-300"
+                : "lg:size-10 size-15 fill-gray-500 hover:fill-gray-600 active:fill-gray-800"
             }
           />
         </button>
@@ -56,8 +56,8 @@ function Carousel({ children }: Props) {
           <FaAngleRight
             className={
               currentSlide === 2
-                ? "size-15 fill-gray-300"
-                : "size-15 fill-gray-500 hover:fill-gray-600 active:fill-gray-800"
+                ? "lg:size-10 size-15 fill-gray-300"
+                : "lg:size-10 size-15 fill-gray-500 hover:fill-gray-600 active:fill-gray-800"
             }
           />
         </button>
